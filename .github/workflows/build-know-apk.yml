@@ -1,4 +1,3 @@
-
 name: Build KNOW APK
 
 on:
@@ -23,9 +22,11 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Extract KNOW source
+      - name: Decode source archive
         run: |
-          test -f KNOW-Android-Source.zip
+          test -f KNOW-Android-Source-Base64.txt
+          base64 --decode KNOW-Android-Source-Base64.txt > KNOW-Android-Source.zip
+          unzip -t KNOW-Android-Source.zip
           unzip -o KNOW-Android-Source.zip -d extracted
           test -f extracted/KNOW/app/build.gradle.kts
 
@@ -40,4 +41,3 @@ jobs:
           name: KNOW-APK
           path: extracted/KNOW/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-          
